@@ -44,7 +44,8 @@ fi
 audio='-c:a libfdk_aac -profile:a aac_he_v2 -b:a 32k'
 
 # create title for ffmpeg metadata
-_title=$(echo "${(C)_file:r}" | sed -r 's/[-_.]/ /g')
+# (C)=Capitalize words,:t=only filename,:r=no extension
+_title=$(echo "${(C)_file:t:r}" | sed -r 's/[-_.]/ /g')
 
 # if file already exists in outputdir, rename output
 if [ -e ${_outputdir}/${_file} ]; then
