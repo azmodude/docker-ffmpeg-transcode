@@ -62,24 +62,25 @@ else
     vcodec="x264"
 fi
 
+_common_options='-hide_banner -loglevel warning -stats'
 # $=audio forces word splitting. Else we would pass in -acodec... with ' quotes
 # zsh does it that way, bash does not
 if [[ ${vcodec} == "x264" ]]; then
     if [[ ${_vf} != "" ]]; then
         set -x
-        ${ffmpeg} -i "${_file}" -vf ${_vf} -vcodec libx264 \
+        ${ffmpeg} ${=_common_options} -i "${_file}" -vf ${_vf} -vcodec libx264 \
         -profile:v high -level 4.1 -map_metadata 0:g \
         -preset slow -crf 23 \
-        -movflags faststart $=audio -strict -2 \
+        -movflags faststart ${=audio} -strict -2 \
         -metadata title="${_title}" \
         "${_outputdir}/${_outfile}"
         [ $? -eq 0 ] || exit 1
         set +x
     else
         set -x
-        ${ffmpeg} -i "${_file}" -vcodec libx264 -profile:v high -level 4.1 \
+        ${ffmpeg} ${=_common_options} -i "${_file}" -vcodec libx264 -profile:v high -level 4.1 \
         -map_metadata 0:g -preset slow -crf 23 -movflags faststart \
-        $=audio -strict -2 -metadata title="${_title}" \
+        ${=audio} -strict -2 -metadata title="${_title}" \
         "${_outputdir}/${_outfile}"
         [ $? -eq 0 ] || exit 1
         set +x
@@ -87,19 +88,19 @@ if [[ ${vcodec} == "x264" ]]; then
 else
     if [[ ${_vf} != "" ]]; then
         set -x
-        ${ffmpeg} -i "${_file}" -vf ${_vf} -vcodec libx265 \
+        ${ffmpeg} ${=_common_options} -i "${_file}" -vf ${_vf} -vcodec libx265 \
         -map_metadata 0:g \
         -preset slow -crf 28 \
-        -movflags faststart $=audio -strict -2 \
+        -movflags faststart ${=audio} -strict -2 \
         -metadata title="${_title}" \
         "${_outputdir}/${_outfile}"
         [ $? -eq 0 ] || exit 1
         set +x
     else
         set -x
-        ${ffmpeg} -i "${_file}" -vcodec libx265 \
+        ${ffmpeg} ${=_common_options} -i "${_file}" -vcodec libx265 \
         -map_metadata 0:g -preset slow -crf 28 -movflags faststart \
-        $=audio -strict -2 -metadata title="${_title}" \
+        ${=audio} -strict -2 -metadata title="${_title}" \
         "${_outputdir}/${_outfile}"
         [ $? -eq 0 ] || exit 1
         set +x
