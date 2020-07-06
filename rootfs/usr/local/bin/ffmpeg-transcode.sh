@@ -57,52 +57,52 @@ fi
 # get resolution
 resolution=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "${_file}")
 if [[ $(echo $resolution | sed -r 's/^([0-9]+).*/\1/') -gt 2000 ]]; then
-	vcodec="x265"
+    vcodec="x265"
 else
-	vcodec="x264"
+    vcodec="x264"
 fi
 
 # $=audio forces word splitting. Else we would pass in -acodec... with ' quotes
 # zsh does it that way, bash does not
 if [[ ${vcodec} == "x264" ]]; then
-	if [[ ${_vf} != "" ]]; then
-	    set -x
-	    ${ffmpeg} -i "${_file}" -vf ${_vf} -vcodec libx264 \
-		-profile:v high -level 4.1 -map_metadata 0:g \
-		-preset slow -crf 23 \
-		-movflags faststart $=audio -strict -2 \
-		-metadata title="${_title}" \
-		"${_outputdir}/${_outfile}"
-	    [ $? -eq 0 ] || exit 1
-	    set +x
-	else
-	    set -x
-	    ${ffmpeg} -i "${_file}" -vcodec libx264 -profile:v high -level 4.1 \
-	    -map_metadata 0:g -preset slow -crf 23 -movflags faststart \
-	    $=audio -strict -2 -metadata title="${_title}" \
-	    "${_outputdir}/${_outfile}"
-	    [ $? -eq 0 ] || exit 1
-	    set +x
-	fi
+    if [[ ${_vf} != "" ]]; then
+        set -x
+        ${ffmpeg} -i "${_file}" -vf ${_vf} -vcodec libx264 \
+        -profile:v high -level 4.1 -map_metadata 0:g \
+        -preset slow -crf 23 \
+        -movflags faststart $=audio -strict -2 \
+        -metadata title="${_title}" \
+        "${_outputdir}/${_outfile}"
+        [ $? -eq 0 ] || exit 1
+        set +x
+    else
+        set -x
+        ${ffmpeg} -i "${_file}" -vcodec libx264 -profile:v high -level 4.1 \
+        -map_metadata 0:g -preset slow -crf 23 -movflags faststart \
+        $=audio -strict -2 -metadata title="${_title}" \
+        "${_outputdir}/${_outfile}"
+        [ $? -eq 0 ] || exit 1
+        set +x
+    fi
 else
-	if [[ ${_vf} != "" ]]; then
-	    set -x
-	    ${ffmpeg} -i "${_file}" -vf ${_vf} -vcodec libx265 \
-		-map_metadata 0:g \
-		-preset slow -crf 28 \
-		-movflags faststart $=audio -strict -2 \
-		-metadata title="${_title}" \
-		"${_outputdir}/${_outfile}"
-	    [ $? -eq 0 ] || exit 1
-	    set +x
-	else
-	    set -x
-	    ${ffmpeg} -i "${_file}" -vcodec libx265 \
-	    -map_metadata 0:g -preset slow -crf 28 -movflags faststart \
-	    $=audio -strict -2 -metadata title="${_title}" \
-	    "${_outputdir}/${_outfile}"
-	    [ $? -eq 0 ] || exit 1
-	    set +x
-	fi
+    if [[ ${_vf} != "" ]]; then
+        set -x
+        ${ffmpeg} -i "${_file}" -vf ${_vf} -vcodec libx265 \
+        -map_metadata 0:g \
+        -preset slow -crf 28 \
+        -movflags faststart $=audio -strict -2 \
+        -metadata title="${_title}" \
+        "${_outputdir}/${_outfile}"
+        [ $? -eq 0 ] || exit 1
+        set +x
+    else
+        set -x
+        ${ffmpeg} -i "${_file}" -vcodec libx265 \
+        -map_metadata 0:g -preset slow -crf 28 -movflags faststart \
+        $=audio -strict -2 -metadata title="${_title}" \
+        "${_outputdir}/${_outfile}"
+        [ $? -eq 0 ] || exit 1
+        set +x
+    fi
 fi
 
