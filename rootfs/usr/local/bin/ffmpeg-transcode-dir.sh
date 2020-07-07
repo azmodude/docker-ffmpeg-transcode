@@ -5,7 +5,7 @@ shopt -s nullglob
 
 [[ -z "${1}" ]] && source='.' || source="${1}"
 
-echo "Size of Directory before transcoding: $(du -hs ${source} | cut -f -1)"
+echo "Size of Directory before transcoding: $(du -hs "${source}" | cut -f -1)"
 
 for file in $(find "${source}" \
     \( -iname \*.flv \
@@ -25,4 +25,4 @@ for file in $(find "${source}" \
         [[ -f "encoded/${filename}.mp4" ]] && rm -f "${file}"
 done
 
-echo "Size of directory after transcoding: $(du -hs ${source} | cut -f -1)"
+echo "Size of directory after transcoding: $(du -hs "${source}" | cut -f -1)"
