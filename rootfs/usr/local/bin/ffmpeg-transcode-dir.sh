@@ -8,6 +8,7 @@ shopt -s nullglob
 echo "Size of Directory before transcoding: $(du -hs "${source}" | cut -f -1)"
 
 for file in $(find "${source}" \
+    ! -path "./encoded/*" \
     \( -iname \*.flv \
     -o -iname \*.f4v \
     -o -iname \*.wmv \
