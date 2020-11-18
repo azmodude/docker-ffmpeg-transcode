@@ -4,6 +4,7 @@
 # x264 version.
 
 ffmpeg=$(which ffmpeg)
+preset="slow"
 
 parse_options()
 {
@@ -56,7 +57,7 @@ fi
 
 # get resolution
 resolution=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "${_file}")
-if [[ $(echo $resolution | sed -r 's/^([0-9]+).*/\1/') -gt 2000 ]]; then
+if [[ $(echo $resolution | sed -r 's/^([0-9]+).*/\1/') -gt 2500 ]]; then
     vcodec="x265"
 else
     vcodec="x264"
@@ -70,7 +71,7 @@ if [[ ${vcodec} == "x264" ]]; then
         set -x
         ${ffmpeg} ${=_common_options} -i "${_file}" -vf ${_vf} -vcodec libx264 \
         -profile:v high -level 4.1 -map_metadata 0:g \
-        -preset slow -crf 23 \
+        -preset "${preset}" -crf 23 \
         -movflags faststart ${=audio} -strict -2 \
         -metadata title="${_title}" \
         "${_outputdir}/${_outfile}"
@@ -79,7 +80,7 @@ if [[ ${vcodec} == "x264" ]]; then
     else
         set -x
         ${ffmpeg} ${=_common_options} -i "${_file}" -vcodec libx264 -profile:v high -level 4.1 \
-        -map_metadata 0:g -preset slow -crf 23 -movflags faststart \
+        -map_metadata 0:g -preset "${preset}" -crf 23 -movflags faststart \
         ${=audio} -strict -2 -metadata title="${_title}" \
         "${_outputdir}/${_outfile}"
         [ $? -eq 0 ] || exit 1
@@ -90,7 +91,7 @@ else
         set -x
         ${ffmpeg} ${=_common_options} -i "${_file}" -vf ${_vf} -vcodec libx265 \
         -map_metadata 0:g \
-        -preset slow -crf 28 \
+        -preset "${preset}" -crf 28 \
         -movflags faststart ${=audio} -strict -2 \
         -metadata title="${_title}" \
         "${_outputdir}/${_outfile}"
@@ -99,7 +100,7 @@ else
     else
         set -x
         ${ffmpeg} ${=_common_options} -i "${_file}" -vcodec libx265 \
-        -map_metadata 0:g -preset slow -crf 28 -movflags faststart \
+        -map_metadata 0:g -preset "${preset}" -crf 28 -movflags faststart \
         ${=audio} -strict -2 -metadata title="${_title}" \
         "${_outputdir}/${_outfile}"
         [ $? -eq 0 ] || exit 1

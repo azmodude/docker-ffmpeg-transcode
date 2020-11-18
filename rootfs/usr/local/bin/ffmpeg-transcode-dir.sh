@@ -26,4 +26,4 @@ for file in $(find "${source}" \
         [[ -f "encoded/${filename}.mp4" ]] && rm -f "${file}"
 done
 
-echo "Size of directory after transcoding: $(du -hs "${source}/encoded/*" | cut -f -1)"
+echo "Size of directory after transcoding: $(du -hs "${source}/encoded" | cut -f -1)"
