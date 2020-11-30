@@ -3,7 +3,7 @@ LABEL maintainer "Gordon Schulz <gordon.schulz@gmail.com>"
 
 RUN set -x && \
     apt-get update && \
-    apt-get -y install zsh git && \
+    apt-get -y install zsh git neovim && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
